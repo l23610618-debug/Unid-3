@@ -1,0 +1,42 @@
+REPORTE DE TRAZA DE EJECUCION
+
+##### ESCENARIO 1: Credencial vencida (adelante) #####
+
+=== ENCADENAMIENTO HACIA ADELANTE ===
+Hechos iniciales: credencial_estado=vencida, usuario_registrado=si, fuera_de_turno=no, ubicacion_conocida=si
+[REGLA DISPARADA] R1: SI credencial_estado=vencida Y usuario_registrado=si ENTONCES diagnostico=Credencial vencida
+Hechos finales: credencial_estado=vencida, usuario_registrado=si, fuera_de_turno=no, ubicacion_conocida=si, diagnostico=Credencial vencida
+
+##### ESCENARIO 2: Intentos fallidos (adelante y atras) #####
+
+=== ENCADENAMIENTO HACIA ADELANTE ===
+Hechos iniciales: credencial_estado=vigente, usuario_registrado=si, intentos_fallidos>=3, fuera_de_turno=no, ubicacion_conocida=si
+[REGLA DISPARADA] R2: SI intentos_fallidos>=3 ENTONCES diagnostico=Posible intento de acceso no autorizado
+[REGLA DISPARADA] R5: SI diagnostico=Posible intento de acceso no autorizado ENTONCES accion=Bloquear cuenta y avisar al administrador
+Hechos finales: credencial_estado=vigente, usuario_registrado=si, intentos_fallidos>=3, fuera_de_turno=no, ubicacion_conocida=si, diagnostico=Posible intento de acceso no autorizado, accion=Bloquear cuenta y avisar al administrador
+[META] accion=Bloquear cuenta y avisar al administrador | probando R5
+   [META] diagnostico=Posible intento de acceso no autorizado | probando R2
+      [HECHO] intentos_fallidos>=3 -> VERDADERO
+   [REGLA DISPARADA] R2 -> diagnostico=Posible intento de acceso no autorizado VERDADERO
+[REGLA DISPARADA] R5 -> accion=Bloquear cuenta y avisar al administrador VERDADERO
+
+##### ESCENARIO 3: Acceso sospechoso (adelante y atras) #####
+
+=== ENCADENAMIENTO HACIA ADELANTE ===
+Hechos iniciales: credencial_estado=vigente, usuario_registrado=si, fuera_de_turno=si, ubicacion_conocida=no
+[REGLA DISPARADA] R3: SI fuera_de_turno=si Y ubicacion_conocida=no ENTONCES diagnostico=Acceso sospechoso
+[REGLA DISPARADA] R4: SI diagnostico=Acceso sospechoso ENTONCES accion=Solicitar verificacion MFA
+Hechos finales: credencial_estado=vigente, usuario_registrado=si, fuera_de_turno=si, ubicacion_conocida=no, diagnostico=Acceso sospechoso, accion=Solicitar verificacion MFA
+[META] accion=Solicitar verificacion MFA | probando R4
+   [META] diagnostico=Acceso sospechoso | probando R3
+      [HECHO] fuera_de_turno=si -> VERDADERO
+      [HECHO] ubicacion_conocida=no -> VERDADERO
+   [REGLA DISPARADA] R3 -> diagnostico=Acceso sospechoso VERDADERO
+[REGLA DISPARADA] R4 -> accion=Solicitar verificacion MFA VERDADERO
+
+##### ESCENARIO 4: Meta que NO se puede demostrar (atras) #####
+[META] accion=Bloquear cuenta y avisar al administrador | probando R5
+   [META] diagnostico=Posible intento de acceso no autorizado | probando R2
+      [FALLO] intentos_fallidos>=3 -> FALSO
+   [FALLO] diagnostico=Posible intento de acceso no autorizado -> FALSO
+[FALLO] accion=Bloquear cuenta y avisar al administrador -> FALSO

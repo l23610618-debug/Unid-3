@@ -1,0 +1,7 @@
+C:\Users\eduf0\source\repos\SBR ACT\SBR ACT\bin\Debug\SBR ACT.exe.config
+C:\Users\eduf0\source\repos\SBR ACT\SBR ACT\bin\Debug\SBR ACT.exe
+C:\Users\eduf0\source\repos\SBR ACT\SBR ACT\bin\Debug\SBR ACT.pdb
+C:\Users\eduf0\source\repos\SBR ACT\SBR ACT\obj\Debug\SBR ACT.csproj.AssemblyReference.cache
+C:\Users\eduf0\source\repos\SBR ACT\SBR ACT\obj\Debug\SBR ACT.csproj.CoreCompileInputs.cache
+C:\Users\eduf0\source\repos\SBR ACT\SBR ACT\obj\Debug\SBR ACT.exe
+C:\Users\eduf0\source\repos\SBR ACT\SBR ACT\obj\Debug\SBR ACT.pdb
